@@ -4,24 +4,77 @@
   <title>Dep.js Unit Tests</title>
   <script type="text/javascript" charset="UTF-8" src="../dep.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <style type="text/css">
+  	body div{
+  		background-color: #ecf0f1;
+  		text-align: left;
+  		width: 250px;
+  		border-radius: 15px;
+  		margin: 20px;
+  	}
+  	p{
+  		display: inline-block;
+  		vertical-align: top;
+  		line-height: 32px;
+  		margin: 15px 0;
+  	}
+  	img{
+  		margin: 15px;
+  	}
+  </style>
 </head>
 <body>
   <h1>Dep.js Unit Tests</h1>
-  <p>(3 + 5) = <span id="test1"></span></p>
+  <h2>Icons from icons8.com</h2>
+  <div id="test1">
+  	<img src="pending.png">
+  	<p>(3 + 5) = <span></span></p>
+  </div>
+  <div id="test2">
+  	<img src="pending.png">
+  	<p>(1 + 4 + 9) = <span></span></p>
+  </div>
 </body>
 <script type="text/javascript">
+function checkEqual(test, val, ans){
+	$('#test'+test+' span').html(val);
+	if(val === ans){
+		$('#test'+test+' img').attr('src', 'passed.png');
+	}else{
+		$('#test'+test+' img').attr('src', 'failed.png');
+	}
+}
 $(window).load(function(){
-	var d = new Dep();
-	var a = d.addDep();
-	var b = d.addDep();
+	// --- Unit Tests --- //
+
+	//Test 1
+	var d1 = new Dep();
+	var t1 = [];
+	t1.push(d1.addDep());
+	t1.push(d1.addDep());
 	setTimeout(function(){
-		a(3)
+		t1[0](3)
 	}, 3000);
 	setTimeout(function(){
-		b(5)
+		t1[1](5)
 	}, 5000);
-	d.calc(function(a, b){
-		alert(a + b);
+	d1.calc(function(a, b){
+		checkEqual(1, a + b, 8);
+	});
+
+	//Test 2 (electric boogaloo)
+	var d2 = new Dep();
+	var t2 = [];
+	t2.push(d2.addDep());
+	t2.push(d2.addDep());
+	setTimeout(function(){
+		t2[0](1, 4)
+	}, 4000);
+	setTimeout(function(){
+		t2[1](9)
+	}, 2000);
+	d2.calc(function(a, b){
+		checkEqual(2, a[0] + a[1] + b, 14);
 	});
 });
 </script>

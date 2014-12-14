@@ -3,6 +3,9 @@ function Dep(){
 	var dep_triggers = [];
 	var final_callback = null;
 
+	//TODO: add null arg vs no arg option
+	//TODO: add single args separated vs grouped option
+
 	//Check that all dependent functions
 	//have been fired and returned
 	var isSatisfied = function(){
@@ -12,8 +15,7 @@ function Dep(){
 			}
 		};
 		if(final_callback != null){
-			//TODO: fix this
-			//final_callback(dep_results);
+			final_callback.apply(null, dep_results);
 		}
 		return true;
 	};
@@ -24,9 +26,15 @@ function Dep(){
 		dep_triggers.push(false);	//not triggered
 		dep_results.push(null);		//no result yet
 		var new_dep = function(){
-			dep_results[dep_i] = arguments;
+			if(arguments.length < 1){
+				dep_results[dep_i] = null;
+			}else if(arguments.length == 1){
+				dep_results[dep_i] = arguments[0];
+			}else{
+				var args = Array.prototype.slice.call(arguments, 0);
+				dep_results[dep_i] = args.sort();
+			}
 			dep_triggers[dep_i] = true;
-			alert("dep callback: "+dep_i);
 			isSatisfied();
 		}
 		return new_dep;
