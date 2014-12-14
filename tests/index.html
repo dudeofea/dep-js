@@ -36,18 +36,26 @@
   </div>
 </body>
 <script type="text/javascript">
+var tests_done = [];
 function checkEqual(test, val, ans){
 	$('#test'+test+' span').html(val);
 	if(val === ans){
 		$('#test'+test+' img').attr('src', 'passed.png');
+		tests_done[test-1](true);
 	}else{
 		$('#test'+test+' img').attr('src', 'failed.png');
+		tests_done[test-1](false);
 	}
 }
 $(window).load(function(){
 	// --- Unit Tests --- //
+	var all_tests = new Dep();
+	all_tests.calc(function(){
+		alert('all tests done');
+	});
 
 	//Test 1
+	tests_done.push(all_tests.addDep());
 	var d1 = new Dep();
 	var t1 = [];
 	t1.push(d1.addDep());
@@ -63,6 +71,7 @@ $(window).load(function(){
 	});
 
 	//Test 2 (electric boogaloo)
+	tests_done.push(all_tests.addDep());
 	var d2 = new Dep();
 	var t2 = [];
 	t2.push(d2.addDep());
