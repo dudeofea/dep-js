@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dep.js Unit Tests</title>
+  <script type="text/javascript" charset="UTF-8" src="../dep.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+<body>
+  <h1>Dep.js Unit Tests</h1>
+  <p>(3 + 5) = <span id="test1"></span></p>
+</body>
+<script type="text/javascript">
+$(window).load(function(){
+	var d = new Dep();
+	var a = d.addDep();
+	var b = d.addDep();
+	setTimeout(function(){
+		a(3)
+	}, 3000);
+	setTimeout(function(){
+		b(5)
+	}, 5000);
+	d.calc(function(a, b){
+		alert(a + b);
+	});
+});
+</script>
+</html>
