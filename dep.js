@@ -8,7 +8,6 @@ function Dep(){
 	//TODO: add error callback that cancels the whole
 	//		sequence if one is called
 
-
 	//Check that all dependent functions
 	//have been fired and returned
 	var isSatisfied = function(){
