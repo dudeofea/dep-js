@@ -44,6 +44,10 @@
   	<img src="pending.png">
   	<p>Empty Arguments Disabled: <span></span></p>
   </div>
+  <div id="test5">
+  	<img src="pending.png">
+  	<p>(5 + 6 + 7 + 8) = <span></span></p>
+  </div>
 </body>
 <script type="text/javascript">
 var tests_done = [];
@@ -130,6 +134,24 @@ $(window).load(function(){
 	}, 1000);
 	d4.calc(function(a, b){
 		checkEqual(4, a + ', ' + b, 'undefined, undefined');
+	});
+
+	//Test 5
+	tests_done.push(all_tests.addDep());
+	var d5 = new Dep({
+		groupedArgs: false
+	});
+	var t5 = [];
+	t5.push(d5.addDep());
+	t5.push(d5.addDep());
+	setTimeout(function(){
+		t5[0](5, 6)
+	}, 3000);
+	setTimeout(function(){
+		t5[1](7, 8)
+	}, 3000);
+	d5.calc(function(a, b, c, d){
+		checkEqual(5, a + b + c + d, 26);
 	});
 });
 </script>

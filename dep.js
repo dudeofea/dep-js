@@ -1,6 +1,7 @@
 function Dep(options){
 	var dep_options = {
-		nullArgs: true
+		nullArgs: true,
+		groupedArgs: true
 	};
 	if(typeof options != 'undefined'){
 		dep_options = options;
@@ -8,9 +9,7 @@ function Dep(options){
 	var dep_results = [];
 	var dep_triggers = [];
 	var final_callback = null;
-
-	//TODO: add null arg vs no arg option
-	//TODO: add single args separated vs grouped option
+	
 	//TODO: all in one arg array option
 	//TODO: add error callback that cancels the whole
 	//		sequence if one is called
@@ -33,6 +32,19 @@ function Dep(options){
 				dep_results = dep_results.filter(function(e){
 					return e !== null;
 				})
+			}
+			if(dep_options['groupedArgs'] === false){
+				var new_arr = [];
+				for (var i = 0; i < dep_results.length; i++) {
+					if("length" in dep_results[i]){
+						for (var j = 0; j < dep_results[i].length; j++) {
+							new_arr.push(dep_results[i][j]);
+						}
+					}else{
+						new_arr.push(dep_results[i]);
+					}
+				}
+				dep_results = new_arr;
 			}
 			final_callback.apply(null, dep_results);
 		}
