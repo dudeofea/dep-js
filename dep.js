@@ -7,11 +7,14 @@ function Dep(){
 	//TODO: add single args separated vs grouped option
 	//TODO: add error callback that cancels the whole
 	//		sequence if one is called
-	
+
 
 	//Check that all dependent functions
 	//have been fired and returned
 	var isSatisfied = function(){
+		if(dep_triggers.length == 0){
+			return false;
+		}
 		for (var i = 0; i < dep_triggers.length; i++) {
 			if(dep_triggers[i] !== true){
 				return false;
