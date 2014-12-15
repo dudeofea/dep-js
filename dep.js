@@ -5,6 +5,8 @@ function Dep(){
 
 	//TODO: add null arg vs no arg option
 	//TODO: add single args separated vs grouped option
+	//TODO: add error callback that cancels the whole
+	//		sequence if one is called
 
 	//Check that all dependent functions
 	//have been fired and returned
@@ -14,6 +16,7 @@ function Dep(){
 				return false;
 			}
 		};
+		//if all functions have returned, trigger the callback
 		if(final_callback != null){
 			final_callback.apply(null, dep_results);
 		}
@@ -26,6 +29,7 @@ function Dep(){
 		dep_triggers.push(false);	//not triggered
 		dep_results.push(null);		//no result yet
 		var new_dep = function(){
+			//Store argument(s)
 			if(arguments.length < 1){
 				dep_results[dep_i] = null;
 			}else if(arguments.length == 1){
@@ -34,6 +38,7 @@ function Dep(){
 				var args = Array.prototype.slice.call(arguments, 0);
 				dep_results[dep_i] = args.sort();
 			}
+			//Set triggered
 			dep_triggers[dep_i] = true;
 			isSatisfied();
 		}
@@ -44,5 +49,6 @@ function Dep(){
 	//are met using the callback function
 	this.calc = function(callback){
 		final_callback = callback;
+		isSatisfied();
 	};
 }
