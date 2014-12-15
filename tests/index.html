@@ -8,9 +8,11 @@
   	body div{
   		background-color: #ecf0f1;
   		text-align: left;
-  		width: 250px;
+  		width: 400px;
   		border-radius: 15px;
   		margin: 20px;
+  		font-family: monospace;
+  		font-size: 11px;
   	}
   	p{
   		display: inline-block;
@@ -33,6 +35,14 @@
   <div id="test2">
   	<img src="pending.png">
   	<p>(1 + 4 + 9) = <span></span></p>
+  </div>
+  <div id="test3">
+  	<img src="pending.png">
+  	<p>Empty Arguments Enabled: <span></span></p>
+  </div>
+  <div id="test4">
+  	<img src="pending.png">
+  	<p>Empty Arguments Disabled: <span></span></p>
   </div>
 </body>
 <script type="text/javascript">
@@ -84,6 +94,42 @@ $(window).load(function(){
 	}, 2000);
 	d2.calc(function(a, b){
 		checkEqual(2, a[0] + a[1] + b, 14);
+	});
+
+	//Test 3: Empty arguments
+	tests_done.push(all_tests.addDep());
+	var d3 = new Dep({
+		nullArgs: true
+	});
+	var t3 = [];
+	t3.push(d3.addDep());
+	t3.push(d3.addDep());
+	setTimeout(function(){
+		t3[0]()
+	}, 3000);
+	setTimeout(function(){
+		t3[1]()
+	}, 1000);
+	d3.calc(function(a, b){
+		checkEqual(3, a + ', ' + b, 'null, null');
+	});
+
+	//Test 4: No empty arguments
+	tests_done.push(all_tests.addDep());
+	var d4 = new Dep({
+		nullArgs: false
+	});
+	var t4 = [];
+	t4.push(d4.addDep());
+	t4.push(d4.addDep());
+	setTimeout(function(){
+		t4[0]()
+	}, 3000);
+	setTimeout(function(){
+		t4[1]()
+	}, 1000);
+	d4.calc(function(a, b){
+		checkEqual(4, a + ', ' + b, 'undefined, undefined');
 	});
 });
 </script>

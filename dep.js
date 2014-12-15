@@ -1,10 +1,17 @@
-function Dep(){
+function Dep(options){
+	var dep_options = {
+		nullArgs: true
+	};
+	if(typeof options != 'undefined'){
+		dep_options = options;
+	}
 	var dep_results = [];
 	var dep_triggers = [];
 	var final_callback = null;
 
 	//TODO: add null arg vs no arg option
 	//TODO: add single args separated vs grouped option
+	//TODO: all in one arg array option
 	//TODO: add error callback that cancels the whole
 	//		sequence if one is called
 
@@ -21,6 +28,12 @@ function Dep(){
 		};
 		//if all functions have returned, trigger the callback
 		if(final_callback != null){
+			if(dep_options['nullArgs'] === false){
+				//remove args from functions with no args
+				dep_results = dep_results.filter(function(e){
+					return e !== null;
+				})
+			}
 			final_callback.apply(null, dep_results);
 		}
 		return true;
