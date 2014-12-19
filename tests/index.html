@@ -48,6 +48,10 @@
   	<img src="pending.png">
   	<p>(5 + 6 + 7 + 8) = <span></span></p>
   </div>
+  <div id="test6">
+  	<img src="pending.png">
+  	<p>(Buncha Numbers) = <span></span></p>
+  </div>
 </body>
 <script type="text/javascript">
 var tests_done = [];
@@ -152,6 +156,28 @@ $(window).load(function(){
 	}, 3500);
 	d5.calc(function(a, b, c, d){
 		checkEqual(5, a + b + c + d, 26);
+	});
+
+	//Test 6: one big array
+	tests_done.push(all_tests.addDep());
+	var d6 = new Dep({
+		bundleArgs: true
+	});
+	var t6 = [];
+	t6.push(d6.addDep());
+	t6.push(d6.addDep());
+	setTimeout(function(){
+		t6[0](1, 2, 9, 9)
+	}, 8000);
+	setTimeout(function(){
+		t6[1](3, 3, 3, 3, 5)
+	}, 200);
+	d6.calc(function(arr){
+		var sum = 0;
+		for (var i = 0; i < arr.length; i++) {
+			sum += arr[i];
+		};
+		checkEqual(6, sum, 38);
 	});
 });
 </script>

@@ -1,7 +1,8 @@
 function Dep(options){
 	var dep_options = {
 		nullArgs: true,
-		groupedArgs: true
+		groupedArgs: true,
+		bundleArgs: false
 	};
 	if(typeof options != 'undefined'){
 		dep_options = options;
@@ -10,7 +11,6 @@ function Dep(options){
 	var dep_triggers = [];
 	var final_callback = null;
 	
-	//TODO: all in one arg array option
 	//TODO: add error callback that cancels the whole
 	//		sequence if one is called
 
@@ -33,7 +33,8 @@ function Dep(options){
 					return e !== null;
 				})
 			}
-			if(dep_options['groupedArgs'] === false){
+			if(dep_options['groupedArgs'] === false || dep_options['bundleArgs'] === true){
+				//don't group args by the function call that sent them
 				var new_arr = [];
 				for (var i = 0; i < dep_results.length; i++) {
 					if("length" in dep_results[i]){
@@ -46,7 +47,12 @@ function Dep(options){
 				}
 				dep_results = new_arr;
 			}
-			final_callback.apply(null, dep_results);
+			if(dep_options['bundleArgs'] === true){
+				//send all args in one big array
+				final_callback(dep_results);
+			}else{
+				final_callback.apply(null, dep_results);
+			}
 		}
 		return true;
 	};
