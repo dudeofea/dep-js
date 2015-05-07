@@ -8,7 +8,7 @@
   	body div{
   		background-color: #ecf0f1;
   		text-align: left;
-  		width: 400px;
+  		width: 600px;
   		border-radius: 15px;
   		margin: 20px;
   		font-family: monospace;
@@ -51,6 +51,10 @@
   <div id="test6">
   	<img src="pending.png">
   	<p>(Buncha Numbers) = <span></span></p>
+  </div>
+  <div id="test7">
+  	<img src="pending.png">
+  	<p>Middle-man function: <span></span></p>
   </div>
 </body>
 <script type="text/javascript">
@@ -178,6 +182,26 @@ $(window).load(function(){
 			sum += arr[i];
 		};
 		checkEqual(6, sum, 38);
+	});
+
+	//Test 7: middle-man function before calc
+	tests_done.push(all_tests.addDep());
+	var d7 = new Dep();
+	var t7 = [];
+	t7.push(d7.addDep(function(a){
+		$('#test7').append('<p>func1: '+a+'</p> ');
+	}));
+	t7.push(d7.addDep(function(b){
+		$('#test7').append('<p>func2: '+b+'</p> ');
+	}));
+	setTimeout(function(){
+		t7[0](2)
+	}, 8000);
+	setTimeout(function(){
+		t7[1](6)
+	}, 200);
+	d7.calc(function(a, b){
+		checkEqual(7, a + b, 8);
 	});
 });
 </script>

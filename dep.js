@@ -1,8 +1,8 @@
 function Dep(options){
 	var dep_options = {
-		nullArgs: true,
-		groupedArgs: true,
-		bundleArgs: false
+		nullArgs: true,			//return null args (true) or don't include in return list (false)
+		groupedArgs: true,		//group args by function (true) or return each arg seperately (false)
+		bundleArgs: false,		//bundle args into one big array (true) or return as separage groups/args (false)
 	};
 	if(typeof options != 'undefined'){
 		dep_options = options;
@@ -13,6 +13,8 @@ function Dep(options){
 	
 	//TODO: add error callback that cancels the whole
 	//		sequence if one is called
+
+	//TODO: make addDep() atomic
 
 	//Check that all dependent functions
 	//have been fired and returned
@@ -58,7 +60,7 @@ function Dep(options){
 	};
 
 	//Add a dependency to the current list
-	this.addDep = function(){
+	this.addDep = function(run_before){
 		var dep_i = dep_triggers.length;
 		dep_triggers.push(false);	//not triggered
 		dep_results.push(null);		//no result yet
@@ -71,6 +73,10 @@ function Dep(options){
 			}else{
 				var args = Array.prototype.slice.call(arguments, 0);
 				dep_results[dep_i] = args.sort();
+			}
+			//run function if we have one
+			if(run_before != null){
+				run_before(dep_results[dep_i]);
 			}
 			//Set triggered
 			dep_triggers[dep_i] = true;
