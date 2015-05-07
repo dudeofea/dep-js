@@ -64,6 +64,8 @@ function Dep(options){
 		var dep_i = dep_triggers.length;
 		dep_triggers.push(false);	//not triggered
 		dep_results.push(null);		//no result yet
+		//arguments for run before function
+		var run_before_args = Array.prototype.slice.call(arguments, 1);	//cut out run_before
 		var new_dep = function(){
 			//Store argument(s)
 			if(arguments.length < 1){
@@ -71,12 +73,14 @@ function Dep(options){
 			}else if(arguments.length == 1){
 				dep_results[dep_i] = arguments[0];
 			}else{
+				//convert args into array (subarray of entire "array")
 				var args = Array.prototype.slice.call(arguments, 0);
 				dep_results[dep_i] = args.sort();
 			}
 			//run function if we have one
 			if(run_before != null){
-				run_before(dep_results[dep_i]);
+				run_before_args.unshift(dep_results[dep_i]);
+				run_before.apply(null, run_before_args);
 			}
 			//Set triggered
 			dep_triggers[dep_i] = true;

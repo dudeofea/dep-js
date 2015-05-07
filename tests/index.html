@@ -56,6 +56,10 @@
   	<img src="pending.png">
   	<p>Middle-man function: <span></span></p>
   </div>
+  <div id="test8">
+  	<img src="pending.png">
+  	<p>Middle-man function w/ args: <span></span></p>
+  </div>
 </body>
 <script type="text/javascript">
 var tests_done = [];
@@ -202,6 +206,26 @@ $(window).load(function(){
 	}, 200);
 	d7.calc(function(a, b){
 		checkEqual(7, a + b, 8);
+	});
+
+	//Test 8: middle-man functions w/ extra args
+	tests_done.push(all_tests.addDep());
+	var d8 = new Dep();
+	var t8 = [];
+	t8.push(d8.addDep(function(a){
+		$('#test8').append('<p>func1: '+a+'</p> ');
+	}));
+	t8.push(d8.addDep(function(b, c){
+		$('#test8').append('<p>func2: '+b+' '+c+'</p> ');
+	}, 666));
+	setTimeout(function(){
+		t8[0](6)
+	}, 4000);
+	setTimeout(function(){
+		t8[1](6)
+	}, 500);
+	d8.calc(function(a, b){
+		checkEqual(8, a + b, 12);
 	});
 });
 </script>
