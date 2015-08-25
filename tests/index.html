@@ -60,6 +60,10 @@
   	<img src="pending.png">
   	<p>Middle-man function w/ args: <span></span></p>
   </div>
+  <div id="test9">
+  	<img src="pending.png">
+  	<p>String concat: <span></span></p>
+  </div>
 </body>
 <script type="text/javascript">
 var tests_done = [];
@@ -226,6 +230,22 @@ $(window).load(function(){
 	}, 500);
 	d8.calc(function(a, b){
 		checkEqual(8, a + b, 12);
+	});
+
+	//Test 9: strings!!! (using the 'in' operand)
+	tests_done.push(all_tests.addDep());
+	var d9 = new Dep();
+	var t9 = [];
+	t9.push(d9.addDep());
+	t9.push(d9.addDep());
+	setTimeout(function(){
+		t9[0](btoa("concat"))
+	}, 600);
+	setTimeout(function(){
+		t9[1]("me")
+	}, 5000);
+	d9.calc(function(a, b){
+		checkEqual(9, a + b, btoa("concat")+"me");
 	});
 });
 </script>

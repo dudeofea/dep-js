@@ -39,7 +39,7 @@ function Dep(options){
 				//don't group args by the function call that sent them
 				var new_arr = [];
 				for (var i = 0; i < dep_results.length; i++) {
-					if("length" in dep_results[i]){
+					if(typeof dep_results[i] !== "string" && "length" in dep_results[i]){
 						for (var j = 0; j < dep_results[i].length; j++) {
 							new_arr.push(dep_results[i][j]);
 						}
